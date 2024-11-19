@@ -6,7 +6,7 @@ Este proyecto es un **microservicio REST** diseñado para gestionar una lista or
 
 ## 🚀 Características Principales
 
-- **Gestión de lecturas personalizadas**: Los usuarios pueden crear, consultar, actualizar y eliminar su lista de lecturas preferidas.
+- **Gestión de lecturas de usuarios**: Los usuarios pueden crear, consultar, actualizar y eliminar su lista de lecturas preferidas.
 - **Arquitectura limpia**: Basado en principios de separación de capas para facilitar mantenibilidad y escalabilidad.
 - **Persistencia NoSQL**: MongoDB se utiliza como base de datos para almacenar los datos del microservicio.
 - **Comunicación asincrónica**: Kafka se usa para integrar eventos con otros servicios en el ecosistema.
@@ -33,7 +33,7 @@ El microservicio expone las siguientes APIs REST para interactuar con las listas
 
 ### 1. **Crear una nueva lectura**
    - **Método**: `POST`
-   - **URL**: `/api/v1/lecturas`
+   - **URL**: `/api/v1/reading`
    - **Descripción**: Permite al usuario agregar un nuevo elemento a su lista de lecturas.
    - **Cuerpo de la solicitud**:
      ```json
@@ -47,12 +47,12 @@ El microservicio expone las siguientes APIs REST para interactuar con las listas
 
 ### 2. **Consultar la lista de lecturas**
    - **Método**: `GET`
-   - **URL**: `/api/v1/lecturas`
+   - **URL**: `/api/v1/reading`
    - **Descripción**: Recupera la lista completa de lecturas preferidas por el usuario.
 
 ### 3. **Actualizar una lectura existente**
    - **Método**: `PUT`
-   - **URL**: `/api/v1/lecturas/{id}`
+   - **URL**: `/api/v1/reading/{id}`
    - **Descripción**: Permite al usuario actualizar los detalles de un elemento específico.
    - **Cuerpo de la solicitud**:
      ```json
@@ -66,18 +66,18 @@ El microservicio expone las siguientes APIs REST para interactuar con las listas
 
 ### 4. **Eliminar una lectura**
    - **Método**: `DELETE`
-   - **URL**: `/api/v1/lecturas/{id}`
+   - **URL**: `/api/v1/reading/{id}`
    - **Descripción**: Elimina un elemento específico de la lista de lecturas del usuario.
 
 ---
 
 ## 📦 Estructura del Proyecto
 
-El proyecto sigue los principios de **arquitectura limpia**, organizándose en capas claramente definidas:
-
-- **Domain**: Define las entidades, interfaces y reglas de negocio.
-- **Application**: Contiene casos de uso y lógica de aplicación.
-- **Infrastructure**: Implementaciones específicas como repositorios, controladores REST y configuración.
+- **Dto**: Objetos para tranferir la información entre capas
+- **Controller**: Clases encargadas para la exposición de APIs.
+- **Service**: Especificaciones e implementaciones de los servicios ofrecidos
+- **Entity**: Clases usadas para el mapeo entre Java y Mongo.
+- **Repository**: Especificaciones para el acceso y operaciones con la base de datos
 - **Tests**: Pruebas unitarias y de integración organizadas en módulos específicos.
 
 ---
