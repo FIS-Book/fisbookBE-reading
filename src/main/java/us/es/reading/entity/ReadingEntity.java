@@ -14,8 +14,8 @@ import lombok.Setter;
 public class ReadingEntity {
 
     @Id
-    private String id;    
-
+    private String id;   
+    
     private String title;
 
     private String description;
