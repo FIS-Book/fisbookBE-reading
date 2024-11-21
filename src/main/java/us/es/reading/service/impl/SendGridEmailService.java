@@ -34,7 +34,7 @@ public class SendGridEmailService implements ISendGridEmailService{
         mail.addContent(content);
         mail.addPersonalization(personalization);
        
-        SendGrid sg = new SendGrid("SG.1234567890.sEiLvoyRF6zkAtusLIDpllJKiuPjgmsCs9klYpuSxfs"); 
+        SendGrid sg = new SendGrid("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"); 
         Request request = new Request();
 
         try {
