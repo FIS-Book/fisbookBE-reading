@@ -5,4 +5,4 @@ services:
       - 8080:8080
     env_file:
       - .env
-    image: jeusaipakoimetre/reading-service:latest
+    image: reading-service
