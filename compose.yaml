@@ -1,9 +1,8 @@
+name: readingService
 services:
-  mongodb:
-    image: 'mongo:latest'
-    environment:
-      - 'MONGO_INITDB_DATABASE=mydatabase'
-      - 'MONGO_INITDB_ROOT_PASSWORD=secret'
-      - 'MONGO_INITDB_ROOT_USERNAME=root'
+  reading-service:
     ports:
-      - '27017'
+      - 8080:8080
+    env_file:
+      - .env
+    image: jeusaipakoimetre/reading-service:latest
