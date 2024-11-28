@@ -12,8 +12,14 @@ import com.sendgrid.helpers.mail.objects.Personalization;
 
 import us.es.reading.service.ISendGridEmailService;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+
 @Service
 public class SendGridEmailService implements ISendGridEmailService{
+
+    @Autowired
+    private Environment env;
 
     @Override
     public void sendEmail(String to, String subject, String body) throws IOException {
@@ -33,8 +39,9 @@ public class SendGridEmailService implements ISendGridEmailService{
         mail.setSubject(subject);
         mail.addContent(content);
         mail.addPersonalization(personalization);
-       
-        SendGrid sg = new SendGrid("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"); 
+
+        String sendGridApiKey = env.getProperty("spring.data.sendgrid.key");
+        SendGrid sg = new SendGrid(sendGridApiKey); 
         Request request = new Request();
 
         try {
