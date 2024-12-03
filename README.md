@@ -20,7 +20,6 @@ Este proyecto es un **microservicio REST** diseñado para gestionar una lista or
 - **Java 17**: Lenguaje de programación para la implementación del servicio.
 - **Spring Boot**: Framework para el desarrollo de aplicaciones web y REST.
 - **MongoDB**: Base de datos NoSQL para almacenamiento.
-- **Kafka**: Mensajería para eventos y comunicación entre servicios.
 - **Maven**: Herramienta de gestión de dependencias y compilación.
 - **Docker**: Para contenedores y despliegue.
 - **JUnit**: Framework para pruebas unitarias e integración.
