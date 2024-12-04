@@ -1,6 +1,6 @@
 # 📚 Microservicio REST - reading-service
 
-Este proyecto es un **microservicio REST** diseñado para gestionar una lista organizada de lecturas preferidas por usuarios. Implementa una **arquitectura limpia** orientada a microservicios y está desarrollado con tecnologías modernas como **Java 17**, **Spring Boot**, **MongoDB**, **Kafka**, y **Maven**.
+Este proyecto es un **microservicio REST** diseñado para gestionar una lista organizada de lecturas preferidas por usuarios. Implementa una **arquitectura limpia** orientada a microservicios y está desarrollado con tecnologías modernas como **Java 17**, **Spring Boot**, **MongoDB** y **Maven**.
 
 ---
 
