@@ -7,9 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
 public class GenreListDTOTests {
 
     // Set a non-empty list of BookDTO objects and verify it is stored correctly

@@ -9,9 +9,7 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
 public class ReadingEntityTests {
 
     // Return null when id field has not been initialized
