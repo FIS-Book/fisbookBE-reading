@@ -1,6 +1,6 @@
 # 📚 Microservicio REST - reading-service
 
-Este proyecto es un **microservicio REST** diseñado para gestionar una lista organizada de lecturas preferidas por usuarios. Implementa una **arquitectura limpia** orientada a microservicios y está desarrollado con tecnologías modernas como **Java 17**, **Spring Boot**, **MongoDB**, **Kafka**, y **Maven**.
+Este proyecto es un **microservicio REST** diseñado para gestionar una lista organizada de lecturas preferidas por usuarios. Implementa una **arquitectura limpia** orientada a microservicios y está desarrollado con tecnologías modernas como **Java 17**, **Spring Boot**, **MongoDB** y **Maven**.
 
 ---
 
@@ -30,43 +30,84 @@ Este proyecto es un **microservicio REST** diseñado para gestionar una lista or
 
 El microservicio expone las siguientes APIs REST para interactuar con las listas de lecturas de los usuarios:
 
-### 1. **Crear una nueva lectura**
-   - **Método**: `POST`
-   - **URL**: `/api/v1/reading`
-   - **Descripción**: Permite al usuario agregar un nuevo elemento a su lista de lecturas.
-   - **Cuerpo de la solicitud**:
-     ```json
-     {
-       "titulo": "El arte de la guerra",
-       "autor": "Sun Tzu",
-       "categoria": "Estrategia",
-       "prioridad": 1
-     }
-     ```
-
-### 2. **Consultar la lista de lecturas**
-   - **Método**: `GET`
-   - **URL**: `/api/v1/reading`
-   - **Descripción**: Recupera la lista completa de lecturas preferidas por el usuario.
-
-### 3. **Actualizar una lectura existente**
+### 1. **Añadir una nueva lista de lecturas**
    - **Método**: `PUT`
-   - **URL**: `/api/v1/reading/{id}`
-   - **Descripción**: Permite al usuario actualizar los detalles de un elemento específico.
+   - **URL**: `/api/v1/readings/add-genre`
+   - **Descripción**: Añadir un nuevo genero en lista de lecturas.
    - **Cuerpo de la solicitud**:
      ```json
      {
-       "titulo": "El arte de la guerra",
-       "autor": "Sun Tzu",
-       "categoria": "Estrategia",
-       "prioridad": 2
+        "userId": "string",
+        "genre": "string",
+        "title": "string",
+        "description": "string"
      }
      ```
 
-### 4. **Eliminar una lectura**
+### 2. **Añadir un nuevo libro**
+   - **Método**: `PUT`
+   - **URL**: `/api/v1/readings/add-book`
+   - **Descripción**: Añadir un nuevo libro a un genero de lecturas.
+   - **Cuerpo de la solicitud**:
+     ```json
+     {
+        "userId": "string",
+        "genre": "string",
+        "isbn": "string",
+        "title": "string"
+     }
+     ```
+
+### 3. **Crear lista de lectura inicial**
+   - **Método**: `POST`
+   - **URL**: `/api/v1/readings`
+   - **Descripción**: Crear lista de lectura inicial.
+   - **Parámetros**:
+     ```
+     userId: string
+     ```
+
+### 4. **Consultar las lecturas**
+   - **Método**: `GET`
+   - **URL**: `/api/v1/readings/{userId}`
+   - **Descripción**: Obtener todas las lecturas de un usuario.
+   - **Parámetros**:
+     ```
+     userId: string
+     ```
+
+### 5. **Eliminar una lista de lectura**
    - **Método**: `DELETE`
-   - **URL**: `/api/v1/reading/{id}`
-   - **Descripción**: Elimina un elemento específico de la lista de lecturas del usuario.
+   - **URL**: `/api/v1/readings/genre/{userId}/{genre}`
+   - **Descripción**: Eliminar una lista de lectura según su genero.
+   - **Parámetros**:
+     ```
+     userId: string
+     genre: string
+     ```
+### 6. **Eliminar un libro**
+   - **Método**: `DELETE`
+   - **URL**: `/api/v1/readings/genre/{userId}/{genre}/{isbn}`
+   - **Descripción**: Eliminar un libro de una lista de lecturas.
+   - **Parámetros**:
+     ```
+     userId: string
+     genre: string
+     isbn: string
+     ```
+
+### 7. **Enviar un email**
+   - **Método**: `POST`
+   - **URL**: `/api/v1/email`
+   - **Descripción**: Enviar un email.
+   - **Cuerpo de la solicitud**:
+     ```json
+     {
+        "to": "string",
+        "subject": "string",
+        "body": "string"
+     }
+     ```
 
 ---
 
