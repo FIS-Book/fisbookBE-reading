@@ -10,14 +10,14 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 public class ReadingEntityDTOTests {
-    
+
     // Return null when userId has not been initialized
     @Test
     public void test_user_id_returns_null_when_not_initialized() {
         ReadingEntityDTO readingEntityDTO = new ReadingEntityDTO();
-    
+
         String result = readingEntityDTO.getUserId();
-    
+
         assertNull(result);
     }
 
@@ -26,9 +26,9 @@ public class ReadingEntityDTOTests {
     public void test_set_valid_user_id() {
         ReadingEntityDTO readingEntityDTO = new ReadingEntityDTO();
         String expectedUserId = "user123";
-    
+
         readingEntityDTO.setUserId(expectedUserId);
-    
+
         assertEquals(expectedUserId, readingEntityDTO.getUserId());
     }
 
@@ -36,9 +36,9 @@ public class ReadingEntityDTOTests {
     @Test
     public void test_set_null_user_id() {
         ReadingEntityDTO readingEntityDTO = new ReadingEntityDTO();
-    
+
         readingEntityDTO.setUserId(null);
-    
+
         assertNull(readingEntityDTO.getUserId());
     }
 
@@ -46,15 +46,14 @@ public class ReadingEntityDTOTests {
     @Test
     public void test_returns_genre_list_when_initialized() {
         List<GenreDTO> expectedGenres = Arrays.asList(
-            new GenreDTO(),
-            new GenreDTO()
-        );
-    
+                new GenreDTO(),
+                new GenreDTO());
+
         ReadingEntityDTO readingEntity = new ReadingEntityDTO();
         readingEntity.setGenres(expectedGenres);
-    
+
         List<GenreDTO> actualGenres = readingEntity.getGenres();
-    
+
         assertEquals(expectedGenres, actualGenres);
         assertEquals(2, actualGenres.size());
     }
@@ -63,14 +62,13 @@ public class ReadingEntityDTOTests {
     @Test
     public void test_returns_unmodifiable_list() {
         List<GenreDTO> initialGenres = Arrays.asList(
-            new GenreDTO()
-        );
-    
+                new GenreDTO());
+
         ReadingEntityDTO readingEntity = new ReadingEntityDTO();
         readingEntity.setGenres(initialGenres);
-    
+
         List<GenreDTO> returnedGenres = readingEntity.getGenres();
-    
+
         assertThrows(UnsupportedOperationException.class, () -> {
             returnedGenres.add(new GenreDTO());
         });
@@ -80,9 +78,8 @@ public class ReadingEntityDTOTests {
     @Test
     public void test_set_null_genres_list() {
         ReadingEntityDTO readingEntity = new ReadingEntityDTO();
-        List<GenreDTO> genres = null;
 
-        readingEntity.setGenres(genres);
+        readingEntity.setGenres(null);
 
         assertNull(readingEntity.getGenres());
     }
