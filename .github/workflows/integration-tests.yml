@@ -35,5 +35,8 @@ jobs:
       - name: Set environment variables # Paso 4: Configurar la URI de MongoDB
         run: echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" >> $GITHUB_ENV
 
-      - name: Run integration tests # Paso 5: Ejecutar las pruebas de Maven
+      - name: Give execute permission to mvnw # Paso 5: Dar permisos de ejecución al wrapper de Maven
+        run: chmod +x ./mvnw
+
+      - name: Run integration tests # Paso 6: Ejecutar las pruebas de Maven
         run: ./mvnw clean test
