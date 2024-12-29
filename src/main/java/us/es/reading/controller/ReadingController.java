@@ -38,8 +38,8 @@ public class ReadingController {
             @ApiResponse(responseCode = "404", description = "Usuario no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
-    @GetMapping("/{userId}")
-    public ResponseEntity<ReadingEntity> getReadingsByUserId(@PathVariable String userId) {
+    @GetMapping
+    public ResponseEntity<ReadingEntity> getReadingsByUserId(@RequestParam("userId") @Valid String userId) {
         ReadingEntity readings = readingService.getReadingsByUserId(userId);
         return ResponseEntity.ok(readings);
     }
@@ -50,9 +50,9 @@ public class ReadingController {
             @ApiResponse(responseCode = "201", description = "Lista de lectura creada exitosamente"),
             @ApiResponse(responseCode = "412", description = "Datos inválidos")
     })
-    @PostMapping
+    @PostMapping("/{userId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ReadingEntity createReading(@RequestParam("userId") @Valid String userId) {
+    public ReadingEntity createReading(@PathVariable String userId) {
         return readingService.createReadingEntity(userId);
     }
 

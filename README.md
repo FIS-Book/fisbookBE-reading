@@ -22,7 +22,7 @@ Este proyecto es un **microservicio REST** diseñado para gestionar una lista or
 - **MongoDB**: Base de datos NoSQL para almacenamiento.
 - **Maven**: Herramienta de gestión de dependencias y compilación.
 - **Docker**: Para contenedores y despliegue.
-- **JUnit**: Framework para pruebas unitarias e integración.
+- **JUnit y Mockito**: Framework para pruebas unitarias e integración.
 
 ---
 
@@ -30,7 +30,15 @@ Este proyecto es un **microservicio REST** diseñado para gestionar una lista or
 
 El microservicio expone las siguientes APIs REST para interactuar con las listas de lecturas de los usuarios:
 
-### 1. **Añadir una nueva lista de lecturas**
+### 1. **Crear lista de lectura inicial**
+Este método es el core de los microservicios siguientes. Para un usuario que solicite y se confirme su alta en la aplicción de deberá llamar a este microservicios
+para realizar la instacia de su espacio de lecturas incial. 
+   - **Método**: `POST`
+   - **URL**: `/api/v1/readings/{userId}`
+   - **Descripción**: Crear lista de lectura inicial.   -
+   - **Ejemplo de la llamada**: /api/v1/readings/00000000001  
+
+### 2. **Añadir una nueva lista de lecturas**
    - **Método**: `PUT`
    - **URL**: `/api/v1/readings/add-genre`
    - **Descripción**: Añadir un nuevo genero en lista de lecturas.
@@ -42,9 +50,9 @@ El microservicio expone las siguientes APIs REST para interactuar con las listas
         "title": "string",
         "description": "string"
      }
-     ```
+     ```  
 
-### 2. **Añadir un nuevo libro**
+### 3. **Añadir un nuevo libro**
    - **Método**: `PUT`
    - **URL**: `/api/v1/readings/add-book`
    - **Descripción**: Añadir un nuevo libro a un genero de lecturas.
@@ -58,33 +66,22 @@ El microservicio expone las siguientes APIs REST para interactuar con las listas
      }
      ```
 
-### 3. **Crear lista de lectura inicial**
-   - **Método**: `POST`
-   - **URL**: `/api/v1/readings`
-   - **Descripción**: Crear lista de lectura inicial.
-   - **Parámetros**:
-     ```
-     userId: string
-     ```
-
 ### 4. **Consultar las lecturas**
    - **Método**: `GET`
-   - **URL**: `/api/v1/readings/{userId}`
+   - **URL**: `/api/v1/readings`
    - **Descripción**: Obtener todas las lecturas de un usuario.
    - **Parámetros**:
      ```
      userId: string
      ```
+   - **Ejemplo de la llamada**: /api/v1/readings?userId=00000000001  
 
 ### 5. **Eliminar una lista de lectura**
    - **Método**: `DELETE`
    - **URL**: `/api/v1/readings/genre/{userId}/{genre}`
-   - **Descripción**: Eliminar una lista de lectura según su genero.
-   - **Parámetros**:
-     ```
-     userId: string
-     genre: string
-     ```
+   - **Descripción**: Eliminar una lista de lectura según su genero.   
+   - **Ejemplo de la llamada**: /api/v1/readings/genre/00000000001/IA 
+
 ### 6. **Eliminar un libro**
    - **Método**: `DELETE`
    - **URL**: `/api/v1/readings/genre/{userId}/{genre}/{isbn}`
@@ -95,6 +92,7 @@ El microservicio expone las siguientes APIs REST para interactuar con las listas
      genre: string
      isbn: string
      ```
+   - **Ejemplo de la llamada**: /api/v1/readings/genre/00000000001/IA/01010101
 
 ### 7. **Enviar un email**
    - **Método**: `POST`
@@ -119,6 +117,7 @@ El microservicio expone las siguientes APIs REST para interactuar con las listas
 - **Entity**: Clases usadas para el mapeo entre Java y Mongo.
 - **Repository**: Especificaciones para el acceso y operaciones con la base de datos
 - **Tests**: Pruebas unitarias y de integración organizadas en módulos específicos.
+- **Resources**: Almacen del fichero .properties que permite acceder mediante varibles a las propiedades de configuración del proyecto                 
 
 ---
 
@@ -127,7 +126,8 @@ El microservicio expone las siguientes APIs REST para interactuar con las listas
 ### Requisitos Previos
 - Java 17
 - Maven 3.8+
-- MongoDB (puerto por defecto: `27017`)
+- MongoDB
+- Docker última versión
 
 ### Pasos
 1. Clona el repositorio:
@@ -139,6 +139,6 @@ El microservicio expone las siguientes APIs REST para interactuar con las listas
 3. Construcción de la imagen 
    docker build -t reading-service .
 4. Levantar la imagen en Docker.
-   docker run -it --rm -p 3002:8080 --name reading-service -e MONGODB_URI=mongodb+srv://edwareang:BNsWcUTOYdPR9ZqU@cluster0.hcpfq.mongodb.net/fisbook_reading -e SENDGRID_API_KEY=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 reading-service
+   docker run -it --rm -p 8080:8080 --name reading-service --env-file .env reading-service  
 
 
