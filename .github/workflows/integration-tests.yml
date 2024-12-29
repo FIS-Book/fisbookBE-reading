@@ -1,0 +1,39 @@
+name: MongoDB Integration Tests
+
+on:
+  push:
+    branches:
+      - main # Ejecutar en cada push a la rama main
+      - develop
+  pull_request:
+    branches:
+      - main # Ejecutar en cada pull request hacia main
+      - develop
+
+jobs:
+  test:
+    runs-on: ubuntu-latest # Ejecutar en un contenedor de Ubuntu
+
+    steps:
+      - name: Checkout code # Paso 1: Descargar el código fuente
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17 # Paso 2: Configurar Java 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin' # Usar el JDK Temurin
+          java-version: '17' # Versión de Java
+
+      - name: Cache Maven dependencies # Paso 3: Cachear dependencias de Maven
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven
+
+      - name: Set environment variables # Paso 4: Configurar la URI de MongoDB
+        run: echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" >> $GITHUB_ENV
+
+      - name: Run integration tests # Paso 5: Ejecutar las pruebas de Maven
+        run: ./mvnw clean test
