@@ -24,20 +24,26 @@ public class ReadingService {
     @Autowired
     private ReadingRepository readingRepository;
 
-    public ReadingEntity createReadingEntity(String userId) {
+    public ReadingEntity createReadingEntity(String userId) {     
         // Validar que todos los campos obligatorios están presentes
         if (userId == null || userId.isEmpty()) {
             throw new PreconditionException(HttpStatus.PRECONDITION_FAILED + " El id del usuario es obligatorio.");
         }
-        ReadingEntity readingEntity = readingRepository.findByUserId(userId).get();
+        ReadingEntity readingEntity = null;
+        try{
+            readingEntity = readingRepository.findByUserId(userId).get();            
+        }catch(Exception e){
+            System.out.println(" =============================== >"+e.getMessage());
+        }
+        
         if (Objects.nonNull(readingEntity)) {
             throw new ConflictoException("El usuario " + userId + " ya existe.");
-        }
+        }       
         // Crear la entidad de lectura
         readingEntity = new ReadingEntity();
         readingEntity.setUserId(userId);
         readingEntity.setGenres(new ArrayList<>());
-        // Guardar la entidad en la base de datos
+        // Guardar la entidad en la base de datos        
         return readingRepository.save(readingEntity);
     }
 

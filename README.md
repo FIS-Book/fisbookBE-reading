@@ -134,9 +134,11 @@ El microservicio expone las siguientes APIs REST para interactuar con las listas
    ```bash
    git clone https://github.com/FIS-Book/fisbookBE-reading.git
    cd reading-service
-2. Construcción del proyecto
+2. Construcción del proyecto y lanzamiento de pruebas unitarias y de integración
    mvn clean package
 3. Construcción de la imagen 
    docker build -t reading-service .
-4. docker run -it --rm -p 3002:8080 --name reading-service reading-service
+4. Levantar la imagen en Docker.
+   docker run -it --rm -p 3002:8080 --name reading-service -e MONGODB_URI=mongodb+srv://edwareang:BNsWcUTOYdPR9ZqU@cluster0.hcpfq.mongodb.net/fisbook_reading -e SENDGRID_API_KEY=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 reading-service
+
 

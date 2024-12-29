@@ -32,6 +32,19 @@ public class ReadingController {
     @Autowired
     private ReadingService readingService;
 
+    @Operation(summary = "Obtener todas las lecturas de un usuario")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de lecturas obtenida exitosamente"),
+            @ApiResponse(responseCode = "404", description = "Usuario no encontrado"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    @GetMapping("/{userId}")
+    public ResponseEntity<ReadingEntity> getReadingsByUserId(@PathVariable String userId) {
+        ReadingEntity readings = readingService.getReadingsByUserId(userId);
+        return ResponseEntity.ok(readings);
+    }
+
+
     @Operation(summary = "Crear lista de lectura inicial")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Lista de lectura creada exitosamente"),
@@ -86,17 +99,5 @@ public class ReadingController {
     public ResponseEntity<ReadingEntity> removeBook(@PathVariable String userId, @PathVariable String genre,
             @PathVariable String isbn) {
         return ResponseEntity.ok(readingService.removeBook(userId, genre, isbn));
-    }
-
-    @Operation(summary = "Obtener todas las lecturas de un usuario")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Lista de lecturas obtenida exitosamente"),
-            @ApiResponse(responseCode = "404", description = "Usuario no encontrado"),
-            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
-    })
-    @GetMapping("/{userId}")
-    public ResponseEntity<ReadingEntity> getReadingsByUserId(@PathVariable String userId) {
-        ReadingEntity readings = readingService.getReadingsByUserId(userId);
-        return ResponseEntity.ok(readings);
     }
 }
