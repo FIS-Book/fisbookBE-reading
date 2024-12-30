@@ -31,7 +31,7 @@ Este proyecto es un **microservicio REST** diseñado para gestionar una lista or
 El microservicio expone las siguientes APIs REST para interactuar con las listas de lecturas de los usuarios:
 
 ### 1. **Crear lista de lectura inicial**
-Este método es el core de los microservicios siguientes. Para un usuario que solicite y se confirme su alta en la aplicción de deberá llamar a este microservicios
+Este método es el core de los microservicios siguientes. Para un usuario que solicite y se confirme su alta en la aplicación deberá llamar a este microservicios
 para realizar la instacia de su espacio de lecturas incial. 
    - **Método**: `POST`
    - **URL**: `/api/v1/readings/{userId}`
@@ -121,24 +121,30 @@ para realizar la instacia de su espacio de lecturas incial.
 
 ---
 
-## 📖 Cómo Ejecutar el Proyecto
+## 📖 Cómo Contruir el Proyecto y generar la imagen
 
 ### Requisitos Previos
 - Java 17
 - Maven 3.8+
 - MongoDB
 - Docker última versión
-
+- Solicitar la carpeta .env al equipo reading-service
+```[edwareang@alum.us.es](mailto:edwareang@alum.us.es)
+   [matgou@alum.us.es](mailto:matgou@alum.us.es)
+```
 ### Pasos
 1. Clona el repositorio:
    ```bash
    git clone https://github.com/FIS-Book/fisbookBE-reading.git
    cd reading-service
 2. Construcción del proyecto y lanzamiento de pruebas unitarias y de integración
-   mvn clean package
+   Este punto es muy importante ya que debido a que las pruebas de integración realizan una conexión a la base de datos de mongo es muy importante cargar las variables del fichero .env mediante el siguiente comando
+   **Get-Content .env | foreach { if ($_ -match "^(.*)=(.*)$") { [System.Environment]::SetEnvironmentVariable($matches[1], $matches[2]) } } 
+   mvn clean package   
 3. Construcción de la imagen 
    docker build -t reading-service .
 4. Levantar la imagen en Docker.
    docker run -it --rm -p 8080:8080 --name reading-service --env-file .env reading-service  
 
 ## 📖 Test unitarios y de integración
+
