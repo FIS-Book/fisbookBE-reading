@@ -32,4 +32,6 @@ jobs:
 
     # Ejecutar Maven clean y package
     - name: Build with Maven
-      run: mvn clean package
+      env:
+        MONGODB_URI: ${{ secrets.MONGODB_URI }}
+      run: mvn clean package -Dspring.data.mongodb.uri=${MONGODB_URI}
