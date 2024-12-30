@@ -1,42 +1,35 @@
-name: MongoDB Integration Tests
+name: CI Maven Build and Test
 
 on:
   push:
     branches:
-      - main # Ejecutar en cada push a la rama main
-      - develop
+      - main
   pull_request:
     branches:
-      - main # Ejecutar en cada pull request hacia main
-      - develop
+      - main
 
 jobs:
-  test:
-    runs-on: ubuntu-latest # Ejecutar en un contenedor de Ubuntu
+  build:
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code # Paso 1: Descargar el código fuente
-        uses: actions/checkout@v3
+    # Checkout del código
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Set up JDK 17 # Paso 2: Configurar Java 17
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin' # Usar el JDK Temurin
-          java-version: '17' # Versión de Java
+    # Configurar Java y Maven
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '17'
 
-      - name: Cache Maven dependencies # Paso 3: Cachear dependencias de Maven
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven
+    # Configurar las variables de entorno
+    - name: Set environment variables
+      env:
+        MONGODB_URI: ${{ secrets.MONGODB_URI }}
+      run: echo "MONGODB_URI is set"
 
-      - name: Set environment variables # Paso 4: Configurar la URI de MongoDB
-        run: echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" >> $GITHUB_ENV
-
-      - name: Give execute permission to mvnw # Paso 5: Dar permisos de ejecución al wrapper de Maven
-        run: chmod +x ./mvnw
-
-      - name: Run integration tests # Paso 6: Ejecutar las pruebas de Maven
-        run: ./mvnw clean test
+    # Ejecutar Maven clean y package
+    - name: Build with Maven
+      run: mvn clean package
