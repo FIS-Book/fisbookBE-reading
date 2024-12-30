@@ -1,10 +1,17 @@
 package us.es.reading.service.impl;
 
 import java.io.IOException;
+import java.util.Objects;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
-import com.sendgrid.*;
+import com.sendgrid.Method;
+import com.sendgrid.Request;
+import com.sendgrid.Response;
+import com.sendgrid.SendGrid;
 import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
@@ -12,18 +19,18 @@ import com.sendgrid.helpers.mail.objects.Personalization;
 
 import us.es.reading.service.ISendGridEmailService;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-
 @Service
 public class SendGridEmailService implements ISendGridEmailService{
 
     @Autowired
     private Environment env;
 
+    private Email email;
+
     @Override
-    public void sendEmail(String to, String subject, String body) throws IOException {
-        Email from = new Email("edwareang@alum.us.es", "FIS-Book");
+    public void sendEmail(String from, String to, String subject, String body) throws IOException {
+        String dt = Objects.nonNull(from)&&StringUtils.isNotBlank(from)?from:"edwareang@alum.us.es";
+        email = new Email(dt, "FIS-Book");
 
         String[] tos = to.split(",");
         Personalization personalization = new Personalization();
@@ -35,7 +42,7 @@ public class SendGridEmailService implements ISendGridEmailService{
 
         Content content = new Content("text/plain", body);       
         Mail mail = new Mail();
-        mail.setFrom(from);
+        mail.setFrom(email);
         mail.setSubject(subject);
         mail.addContent(content);
         mail.addPersonalization(personalization);
@@ -53,5 +60,4 @@ public class SendGridEmailService implements ISendGridEmailService{
             throw ex; 
         }
     }
-
 }
