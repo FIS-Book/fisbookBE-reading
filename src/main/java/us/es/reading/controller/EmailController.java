@@ -3,7 +3,6 @@ package us.es.reading.controller;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +17,6 @@ import us.es.reading.service.impl.SendGridEmailService;
 
 @RestController
 @RequestMapping(ConstantsConfig.API_BASE_URL+"/email")
-@CrossOrigin(origins = "http://localhost:3000")
 public class EmailController {
 
     @Autowired
