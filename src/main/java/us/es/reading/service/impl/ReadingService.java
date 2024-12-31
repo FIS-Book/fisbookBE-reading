@@ -17,6 +17,7 @@ import us.es.reading.exception.ConflictoException;
 import us.es.reading.exception.PreconditionException;
 import us.es.reading.exception.ResourceNotFoundException;
 import us.es.reading.repository.ReadingRepository;
+import us.es.reading.utils.ISBNValidator;
 
 @Service
 public class ReadingService {
@@ -33,7 +34,7 @@ public class ReadingService {
         try{
             readingEntity = readingRepository.findByUserId(userId).get();            
         }catch(Exception e){
-            System.out.println(" =============================== >"+e.getMessage());
+            System.out.println(" = >"+e.getMessage());
         }
         
         if (Objects.nonNull(readingEntity)) {
@@ -94,6 +95,9 @@ public class ReadingService {
         if (dto.getIsbn() == null || dto.getIsbn().isEmpty()) {
             throw new PreconditionException(HttpStatus.PRECONDITION_FAILED + " El ISBN es obligatoria.");
         }
+        if(!ISBNValidator.isValidISBN(dto.getIsbn())){
+            throw new PreconditionException(HttpStatus.PRECONDITION_FAILED + " El ISBN no es válido.");
+        }
 
         ReadingEntity readingEntity = readingRepository.findByUserId(dto.getUserId()).orElseThrow(
                 () -> new ResourceNotFoundException("Lista de lecturas con ID " + dto.getUserId() + " no encontrado."));
@@ -134,6 +138,9 @@ public class ReadingService {
         }
         if (isbn == null || isbn.isEmpty()) {
             throw new PreconditionException(HttpStatus.PRECONDITION_FAILED + " El ISBN es obligatorio.");
+        }
+        if(!ISBNValidator.isValidISBN(isbn)){
+            throw new PreconditionException(HttpStatus.PRECONDITION_FAILED + " El ISBN no es válido.");
         }
 
         // Buscar la lista de lecturas por userId

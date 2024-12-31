@@ -21,11 +21,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import us.es.reading.api.BookDTO;
 import us.es.reading.api.GenreDTO;
+import us.es.reading.config.ConstantsConfig;
 import us.es.reading.entity.ReadingEntity;
 import us.es.reading.service.impl.ReadingService;
 
 @RestController
-@RequestMapping("/api/v1/readings")
+@RequestMapping(ConstantsConfig.API_BASE_URL+"/readings")
 @CrossOrigin(origins = "http://localhost:3000")
 public class ReadingController {
 
@@ -99,5 +100,5 @@ public class ReadingController {
     public ResponseEntity<ReadingEntity> removeBook(@PathVariable String userId, @PathVariable String genre,
             @PathVariable String isbn) {
         return ResponseEntity.ok(readingService.removeBook(userId, genre, isbn));
-    }
+    } 
 }
