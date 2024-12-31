@@ -8,7 +8,7 @@ WORKDIR /app
 COPY target/reading-service.jar reading-service.jar
 
 # Exponer el puerto de la aplicación
-EXPOSE 8080
+EXPOSE 3000
 
 # Ejecutar la aplicación
 CMD ["java", "-jar", "reading-service.jar"]
