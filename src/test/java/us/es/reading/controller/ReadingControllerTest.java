@@ -16,6 +16,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import us.es.reading.api.BookDTO;
 import us.es.reading.api.GenreDTO;
+import us.es.reading.api.GenreUpdateDTO;
+import us.es.reading.entity.Genre;
 import us.es.reading.entity.ReadingEntity;
 import us.es.reading.exception.ConflictoException;
 import us.es.reading.exception.PreconditionException;
@@ -186,5 +188,44 @@ public class ReadingControllerTest {
         when(readingService.removeBook(userId, genre, isbn)).thenThrow(new ResourceNotFoundException("Book not found"));
 
         assertThrows(ResourceNotFoundException.class, () -> controller.removeBook(userId, genre, isbn));
+    }
+
+    // Valid genreId returns corresponding Genre object with 200 status
+    @Test
+    public void test_valid_genre_id_returns_genre() {
+        String validGenreId = "001_1";
+        Genre expectedGenre = new Genre();
+        expectedGenre.setGenreId(validGenreId);
+
+        when(readingService.getGenreByGenreId(validGenreId)).thenReturn(expectedGenre);
+
+        ResponseEntity<Genre> response = controller.getGenreByUserId(validGenreId);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(expectedGenre, response.getBody());
+        verify(readingService).getGenreByGenreId(validGenreId);
+    }
+
+       // Successfully update genre with valid GenreUpdateDTO data
+    @Test
+    public void test_update_genre_with_valid_dto() {
+        GenreUpdateDTO dto = new GenreUpdateDTO();
+        dto.setGenreId("001_1");
+        dto.setNumberReviews(5);
+        dto.setScore(5.0);
+
+        Genre expectedGenre = new Genre();
+        expectedGenre.setGenreId("001_1");
+        expectedGenre.setNumberReviews(5);
+        expectedGenre.setScore(5.0);
+
+        when(readingService.updateGenre(dto)).thenReturn(expectedGenre);
+
+        Genre result = controller.updateGenre(dto);
+
+        verify(readingService).updateGenre(dto);
+        assertEquals(result.getGenreId(), expectedGenre.getGenreId());
+        assertEquals(result.getNumberReviews(), expectedGenre.getNumberReviews());
+        assertEquals(result.getScore(), expectedGenre.getScore());
     }
 }

@@ -12,6 +12,12 @@ public class Genre {
 
     private List<Book> books;
 
+    private String genreId;
+
+    private Integer numberReviews;
+
+    private Double score;
+
     public String getGenre() {
         return genre;
     }
@@ -44,5 +50,27 @@ public class Genre {
         this.books = books;
     }
 
-    
+    public String getGenreId() {
+        return genreId;
+    }
+
+    public void setGenreId(String genreId) {
+        this.genreId = genreId;
+    }
+
+    public Integer getNumberReviews() {
+        return numberReviews;
+    }
+
+    public void setNumberReviews(Integer numberReviews) {
+        this.numberReviews = numberReviews;
+    }
+
+    public Double getScore() {
+        return score;
+    }
+
+    public void setScore(Double score) {
+        this.score = score;
+    }  
 }
