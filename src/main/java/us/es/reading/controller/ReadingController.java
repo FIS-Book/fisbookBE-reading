@@ -6,9 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,7 +21,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import us.es.reading.api.BookDTO;
 import us.es.reading.api.GenreDTO;
+import us.es.reading.api.GenreUpdateDTO;
 import us.es.reading.config.ConstantsConfig;
+import us.es.reading.entity.Genre;
 import us.es.reading.entity.ReadingEntity;
 import us.es.reading.service.impl.ReadingService;
 
@@ -43,8 +45,7 @@ public class ReadingController {
     public ResponseEntity<ReadingEntity> getReadingsByUserId(@RequestParam("userId") @Valid String userId) {
         ReadingEntity readings = readingService.getReadingsByUserId(userId);
         return ResponseEntity.ok(readings);
-    }
-
+    }    
 
     @Operation(summary = "Crear lista de lectura inicial")
     @ApiResponses(value = {
@@ -63,7 +64,7 @@ public class ReadingController {
             @ApiResponse(responseCode = "412", description = "Datos inválidos"),
             @ApiResponse(responseCode = "409", description = "Conflicto datos existentes")
     })
-    @PutMapping("/add-genre")
+    @PatchMapping("/add-genre")
     @ResponseStatus(HttpStatus.OK)
     public ReadingEntity createNewGenrerReading(@RequestBody @Valid GenreDTO dto) {
         return readingService.addGenreToReadingEntity(dto);
@@ -74,7 +75,7 @@ public class ReadingController {
             @ApiResponse(responseCode = "200", description = "Genero añadido exitosamente"),
             @ApiResponse(responseCode = "412", description = "Datos inválidos")
     })
-    @PutMapping("/add-book")
+    @PatchMapping("/add-book")
     @ResponseStatus(HttpStatus.OK)
     public ReadingEntity addBookToGenre(@RequestBody @Valid BookDTO dto) {
         return readingService.addBookToGenre(dto);
@@ -101,4 +102,27 @@ public class ReadingController {
             @PathVariable String isbn) {
         return ResponseEntity.ok(readingService.removeBook(userId, genre, isbn));
     } 
+
+    @Operation(summary = "Obtener una lista de lecturas específicas de un usuario")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de lecturas obtenida exitosamente"),
+            @ApiResponse(responseCode = "404", description = "Usuario no encontrado"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    @GetMapping("/genres")
+    public ResponseEntity<Genre> getGenreByUserId(@RequestParam("genreId") @Valid String genreId) {
+        Genre genre = readingService.getGenreByGenreId(genreId);
+        return ResponseEntity.ok(genre);
+    }
+
+    @Operation(summary = "Actualiza una lista de lectura")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Genero añadido exitosamente"),
+            @ApiResponse(responseCode = "412", description = "Datos inválidos")
+    })
+    @PatchMapping("/update-genre")
+    @ResponseStatus(HttpStatus.OK)
+    public Genre updateGenre(@RequestBody GenreUpdateDTO dto) {
+        return readingService.updateGenre(dto);
+    }
 }
