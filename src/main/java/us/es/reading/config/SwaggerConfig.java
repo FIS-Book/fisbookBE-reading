@@ -11,7 +11,7 @@ import io.swagger.v3.oas.models.servers.Server;
 @Configuration
 public class SwaggerConfig {
    
-    @Value("${api.version}"+"/readings/api-docs")
+    @Value("/readings/api-docs")
     private String readingsBaseUrl;
 
     @Bean
