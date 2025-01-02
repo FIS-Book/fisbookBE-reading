@@ -27,11 +27,11 @@ jobs:
     # Configurar las variables de entorno
     - name: Set environment variables
       env:
-        MONGODB_URI: ${{ secrets.MONGODB_URI }}
-      run: echo "MONGODB_URI is set"
+        MONGODB_URI: ${{ secrets.MONGODB_URI_READINGS }}
+      run: echo "MONGODB_URI_READINGS is set"
 
     # Ejecutar Maven clean y package
     - name: Build with Maven
       env:
-        MONGODB_URI: ${{ secrets.MONGODB_URI }}
-      run: mvn clean package -Dspring.data.mongodb.uri=${MONGODB_URI}
+        MONGODB_URI: ${{ secrets.MONGODB_URI_READINGS }}
+      run: mvn clean package -Dspring.data.mongodb.uri=${MONGODB_URI_READINGS}

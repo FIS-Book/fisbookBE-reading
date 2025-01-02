@@ -56,6 +56,7 @@ public class SendGridEmailService implements ISendGridEmailService{
             request.setEndpoint("mail/send"); //endpoint de la API de SendGrid 
             request.setBody(mail.build()); 
             Response response = sg.api(request);
+            System.out.println(response.getStatusCode());
         } catch (IOException ex) {
             throw ex; 
         }
