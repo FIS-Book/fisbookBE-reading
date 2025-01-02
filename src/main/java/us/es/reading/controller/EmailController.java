@@ -12,11 +12,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import us.es.reading.api.EmailRequest;
-import us.es.reading.config.ConstantsConfig;
 import us.es.reading.service.impl.SendGridEmailService;
 
 @RestController
-@RequestMapping(ConstantsConfig.API_BASE_URL+"/email")
+@RequestMapping("${readings.base.url}/email")
 public class EmailController {
 
     @Autowired
