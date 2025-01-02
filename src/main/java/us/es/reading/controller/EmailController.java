@@ -15,7 +15,7 @@ import us.es.reading.api.EmailRequest;
 import us.es.reading.service.impl.SendGridEmailService;
 
 @RestController
-@RequestMapping("${readings.base.url}/email")
+@RequestMapping("${api.version}"+"/email")
 public class EmailController {
 
     @Autowired
