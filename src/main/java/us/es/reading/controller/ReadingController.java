@@ -21,13 +21,12 @@ import jakarta.validation.Valid;
 import us.es.reading.api.BookDTO;
 import us.es.reading.api.GenreDTO;
 import us.es.reading.api.GenreUpdateDTO;
-import us.es.reading.config.ConstantsConfig;
 import us.es.reading.entity.Genre;
 import us.es.reading.entity.ReadingEntity;
 import us.es.reading.service.impl.ReadingService;
 
 @RestController
-@RequestMapping(ConstantsConfig.API_BASE_URL+"/readings")
+@RequestMapping("${readings.base.url}/readings")
 public class ReadingController {
 
     @Autowired
