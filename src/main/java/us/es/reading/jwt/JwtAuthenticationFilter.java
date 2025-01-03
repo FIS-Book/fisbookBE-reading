@@ -26,7 +26,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // Excluir rutas de Swagger UI y de la documentación de la API
         if (request.getRequestURI().startsWith("/api/v1/readings/swagger-ui/") ||
                 request.getRequestURI().startsWith("/api/v1/readings/api-docs") ||
-                request.getRequestURI().startsWith("/v3/api-docs")) {
+                request.getRequestURI().startsWith("/v3/api-docs") || 
+                request.getRequestURI().startsWith("/api/v1/readings/healthz")) {
             filterChain.doFilter(request, response);
             return;
         }
