@@ -30,15 +30,17 @@ jobs:
         MONGODB_URI_READINGS: ${{ secrets.MONGODB_URI_READINGS }}
         API_VERSION: ${{ secrets.API_VERSION }}
         BASE_URL: ${{ secrets.BASE_URL }}
+        JWT_SECRET: ${{ secrets.JWT_SECRET }}
       run: |
         echo "MONGODB_URI_READINGS is set"
         echo "API_VERSION is set to $API_VERSION"
         echo "BASE_URL is set to $BASE_URL"
-
+        echo "JWT_SECRET is set to $JWT_SECRET"
     # Ejecutar Maven clean y package
     - name: Build with Maven
       env:
         MONGODB_URI_READINGS: ${{ secrets.MONGODB_URI_READINGS }}
         API_VERSION: ${{ secrets.API_VERSION }}
         BASE_URL: ${{ secrets.BASE_URL }}
-      run: mvn clean package -Dspring.data.mongodb.uri=${MONGODB_URI_READINGS} -Dapi.version=${API_VERSION} -Dapi.version=${BASE_URL}
+        JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      run: mvn clean package -Dspring.data.mongodb.uri=${MONGODB_URI_READINGS} -Dapi.version=${API_VERSION} -Dapi.version=${BASE_URL} -Dapi.version=${JWT_SECRET}
