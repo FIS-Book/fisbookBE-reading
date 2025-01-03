@@ -26,7 +26,7 @@ import us.es.reading.entity.ReadingEntity;
 import us.es.reading.service.impl.ReadingService;
 
 @RestController
-@RequestMapping("${api.version}"+"/readings")
+@RequestMapping("${api.version}")
 public class ReadingController {
 
     @Autowired
