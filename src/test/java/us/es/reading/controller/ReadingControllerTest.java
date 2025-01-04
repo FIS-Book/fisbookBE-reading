@@ -17,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 import us.es.reading.api.BookDTO;
 import us.es.reading.api.GenreDTO;
 import us.es.reading.api.GenreUpdateDTO;
+import us.es.reading.api.ReadingDTO;
 import us.es.reading.entity.Genre;
 import us.es.reading.entity.ReadingEntity;
 import us.es.reading.exception.ConflictoException;
@@ -71,11 +72,12 @@ public class ReadingControllerTest {
     // POST request creates new reading list and returns 201 status
     @Test
     public void test_create_reading_returns_201() {
-        String userId = "002";
-
-        when(readingService.createReadingEntity(userId)).thenReturn(readingEntity);
-
-        ReadingEntity response = controller.createReading(userId);
+        ReadingDTO dto = new ReadingDTO();
+        dto.setUserId("002");
+        dto.setUserKey("fisbook2025");
+        when(readingService.createReadingEntity(dto.getUserId())).thenReturn(readingEntity);
+        
+        ReadingEntity response = controller.createReading(dto);
 
         assertEquals(readingEntity, response);
     }
@@ -143,12 +145,13 @@ public class ReadingControllerTest {
 
     // POST request with invalid userId format returns 412
     @Test
-    public void test_create_reading_returns_412_for_invalid_format() {
-        String invalidUserId = "";
-        when(readingService.createReadingEntity(invalidUserId))
+    public void test_create_reading_returns_412_for_invalid_format() {        
+        ReadingDTO dto = new ReadingDTO();
+        dto.setUserKey("fisbook2025");
+        when(readingService.createReadingEntity(dto.getUserId()))
                 .thenThrow(new PreconditionException("Invalid userId format"));
 
-        assertThrows(PreconditionException.class, () -> controller.createReading(invalidUserId));
+        assertThrows(PreconditionException.class, () -> controller.createReading(dto));
     }
 
     // PUT request for genre with duplicate data returns 409

@@ -1,5 +1,7 @@
 package us.es.reading.controller;
 
+import java.util.Objects;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +23,12 @@ import jakarta.validation.Valid;
 import us.es.reading.api.BookDTO;
 import us.es.reading.api.GenreDTO;
 import us.es.reading.api.GenreUpdateDTO;
+import us.es.reading.api.ReadingDTO;
 import us.es.reading.entity.Genre;
 import us.es.reading.entity.ReadingEntity;
+import us.es.reading.exception.PreconditionException;
 import us.es.reading.service.impl.ReadingService;
+import us.es.reading.utils.Constants;
 
 @RestController
 @RequestMapping("${api.version}")
@@ -42,17 +47,20 @@ public class ReadingController {
     public ResponseEntity<ReadingEntity> getReadingsByUserId(@RequestParam("userId") @Valid String userId) {
         ReadingEntity readings = readingService.getReadingsByUserId(userId);
         return ResponseEntity.ok(readings);
-    }    
+    }
 
     @Operation(summary = "Crear lista de lectura inicial")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Lista de lectura creada exitosamente"),
             @ApiResponse(responseCode = "412", description = "Datos inválidos")
     })
-    @PostMapping("/{userId}")
+    @PostMapping("create-list")
     @ResponseStatus(HttpStatus.CREATED)
-    public ReadingEntity createReading(@PathVariable String userId) {
-        return readingService.createReadingEntity(userId);
+    public ReadingEntity createReading(@RequestBody @Valid ReadingDTO dto) {
+        if (Objects.isNull(dto.getUserKey()) || dto.getUserKey().isEmpty() || !dto.getUserKey().equals(Constants.KEY)) {
+            throw new PreconditionException(HttpStatus.PRECONDITION_FAILED + " El userKey es obligatorio o no ha sido validado");
+        }
+        return readingService.createReadingEntity(dto.getUserId());
     }
 
     @Operation(summary = "Añadir un nuevo genero en lista de lecturas")
@@ -98,7 +106,7 @@ public class ReadingController {
     public ResponseEntity<ReadingEntity> removeBook(@PathVariable String userId, @PathVariable String genre,
             @PathVariable String isbn) {
         return ResponseEntity.ok(readingService.removeBook(userId, genre, isbn));
-    } 
+    }
 
     @Operation(summary = "Obtener una lista de lecturas específicas de un usuario")
     @ApiResponses(value = {
