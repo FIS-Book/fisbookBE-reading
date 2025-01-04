@@ -9,6 +9,7 @@ public class EmailRequest {
     private String to;
     private String subject;
     private String body;
+    private String keyEmail;
 
     public String getFrom() {
         return from;
@@ -34,5 +35,11 @@ public class EmailRequest {
     }
     public void setBody(String body) {
         this.body = body;
-    }        
+    }
+    public String getKeyEmail() {
+        return keyEmail;
+    }
+    public void setKeyEmail(String keyEmail) {
+        this.keyEmail = keyEmail;
+    } 
 }

@@ -32,6 +32,7 @@ public class EmailControllerTests {
     @Test
     public void test_valid_email_request_returns_success() throws IOException {
         EmailRequest request = new EmailRequest();
+        request.setKeyEmail("fisbook2025");
         request.setFrom("sender@test.com");
         request.setTo("recipient@test.com"); 
         request.setSubject("Test Subject");
@@ -52,6 +53,7 @@ public class EmailControllerTests {
     @Test
     public void test_null_email_fields_throws_exception() throws IOException {
         EmailRequest request = new EmailRequest();
+        request.setKeyEmail("fisbook2025");
         request.setFrom(null);
         request.setTo("");
         request.setSubject(null);
