@@ -4,5 +4,5 @@ import java.io.IOException;
 
 public interface ISendGridEmailService {
 
-    void sendEmail(String from, String to, String subject, String body) throws IOException;
+    void sendEmail(String from, String to, String subject, String body, String emailKey) throws IOException;
 }

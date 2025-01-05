@@ -18,6 +18,7 @@ import com.sendgrid.helpers.mail.objects.Email;
 import com.sendgrid.helpers.mail.objects.Personalization;
 
 import us.es.reading.service.ISendGridEmailService;
+import us.es.reading.utils.FieldsValidate;
 
 @Service
 public class SendGridEmailService implements ISendGridEmailService{
@@ -28,7 +29,8 @@ public class SendGridEmailService implements ISendGridEmailService{
     private Email email;
 
     @Override
-    public void sendEmail(String from, String to, String subject, String body) throws IOException {
+    public void sendEmail(String from, String to, String subject, String body, String emailKey) throws IOException {
+        FieldsValidate.validateFieldsToSendEmail(from, to, subject, body, emailKey);
         String dt = Objects.nonNull(from)&&StringUtils.isNotBlank(from)?from:"edwareang@alum.us.es";
         email = new Email(dt, "FIS-Book");
 

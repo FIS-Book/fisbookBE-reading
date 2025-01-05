@@ -74,7 +74,6 @@ public class ReadingControllerTest {
     public void test_create_reading_returns_201() {
         ReadingDTO dto = new ReadingDTO();
         dto.setUserId("002");
-        dto.setUserKey("fisbook2025");
         when(readingService.createReadingEntity(dto.getUserId())).thenReturn(readingEntity);
         
         ReadingEntity response = controller.createReading(dto);
@@ -147,7 +146,6 @@ public class ReadingControllerTest {
     @Test
     public void test_create_reading_returns_412_for_invalid_format() {        
         ReadingDTO dto = new ReadingDTO();
-        dto.setUserKey("fisbook2025");
         when(readingService.createReadingEntity(dto.getUserId()))
                 .thenThrow(new PreconditionException("Invalid userId format"));
 
