@@ -16,21 +16,23 @@ public class SecurityConfig {
     public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
-
+      
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-            .authorizeHttpRequests()
-            .requestMatchers(
-                "/api/v1/readings/swagger-ui/**", // Swagger UI
-                "/api/v1/readings/api-docs/**"
-            ).permitAll()
-            .requestMatchers("/readings/**").authenticated()
-            .anyRequest().permitAll()
-            .and()
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        http.cors() // Habilita CORS desde tu configuración global
+                .and()
+                .csrf().disable()
+                .authorizeHttpRequests()
+                .requestMatchers(
+                        "/api/v1/readings/swagger-ui/**", // Swagger UI
+                        "/api/v1/readings/api-docs/**")
+                .permitAll()
+                .requestMatchers("/readings/**").authenticated()
+                .anyRequest().permitAll()
+                .and()
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
-}
 
+}

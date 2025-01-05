@@ -1,5 +1,8 @@
 package us.es.reading.utils;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.springframework.http.HttpStatus;
 
 import us.es.reading.api.BookDTO;
@@ -72,6 +75,40 @@ public class FieldsValidate {
         if (dto.getScore() != null && (dto.getScore() <= 0.0)) {
             throw new PreconditionException(
                     HttpStatus.PRECONDITION_FAILED + " Las puntuaciones no pueden ser cero ni negativas");
+        }
+    }
+
+    public static boolean isValidEmail(String email) {
+        String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@([A-Za-z0-9.-]+\\.[A-Za-z]{2,})$";
+        Pattern pattern = Pattern.compile(EMAIL_REGEX);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
+    public static void validateFieldsToSendEmail(String from, String to, String subject, String body, String emailKey) {
+        if (from == null || from.isEmpty()) {
+            throw new PreconditionException(
+                    HttpStatus.PRECONDITION_FAILED + " El origen es obligatorio.");
+        }
+        if (to == null || to.isEmpty()) {
+            throw new PreconditionException(
+                    HttpStatus.PRECONDITION_FAILED + " El destino es obligatorio.");
+        }
+        if (subject == null || subject.isEmpty()) {
+            throw new PreconditionException(
+                    HttpStatus.PRECONDITION_FAILED + " El asunto es obligatorio.");
+        }
+        if (body == null || body.isEmpty()) {
+            throw new PreconditionException(
+                    HttpStatus.PRECONDITION_FAILED + " El cuerpo es obligatorio.");
+        }
+        if (emailKey == null || emailKey.isEmpty()
+                || !emailKey.equals(Constants.KEY)) {
+            throw new PreconditionException(HttpStatus.PRECONDITION_FAILED + " Clave para enviar el email incorrecta.");
+        }
+        if (!isValidEmail(to) || !isValidEmail(from)) {
+            throw new PreconditionException(
+                    HttpStatus.PRECONDITION_FAILED + " Formato de email no válido.");
         }
     }
 }

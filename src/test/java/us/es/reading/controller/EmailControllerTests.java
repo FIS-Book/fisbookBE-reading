@@ -44,7 +44,7 @@ public class EmailControllerTests {
             request.getFrom(),
             request.getTo(), 
             request.getSubject(),
-            request.getBody()
+            request.getBody(), request.getKeyEmail()
         );
         assertEquals(response, "Correo enviado correctamente a: recipient@test.com");
     }
@@ -53,7 +53,7 @@ public class EmailControllerTests {
     @Test
     public void test_null_email_fields_throws_exception() throws IOException {
         EmailRequest request = new EmailRequest();
-        request.setKeyEmail("fisbook2025");
+        request.setKeyEmail("");
         request.setFrom(null);
         request.setTo("");
         request.setSubject(null);
@@ -61,11 +61,11 @@ public class EmailControllerTests {
 
         doThrow(new IOException("Invalid email fields"))
             .when(sendGridEmailService)
-            .sendEmail(null, "", null, "");
+            .sendEmail(null, "", null, "", "");
 
         String response = controller.sendEmail(request);
 
-        verify(sendGridEmailService).sendEmail(null, "", null, "");
+        verify(sendGridEmailService).sendEmail(null, "", null, "", "");
         assertEquals(response, "Error al enviar el correo: Invalid email fields");
     }
 }

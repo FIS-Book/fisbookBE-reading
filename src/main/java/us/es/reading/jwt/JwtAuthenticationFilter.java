@@ -21,18 +21,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
-
+            throws ServletException, IOException {       
         String requestURI = request.getRequestURI();
-        String method = request.getMethod();
         // Excluir rutas de Swagger UI y de la documentación de la API
         if (requestURI.startsWith("/api/v1/readings/swagger-ui/") ||
                 requestURI.startsWith("/api/v1/readings/api-docs") ||
                 requestURI.startsWith("/v3/api-docs") ||
-                request.getRequestURI().startsWith("/api/v1/readings/healthz") || 
-                request.getRequestURI().startsWith("/api/v1/readings/email") ||
-                request.getRequestURI().startsWith("/api/v1/readings/create-list")) {                                                                                        
-            filterChain.doFilter(request, response);          
+                request.getRequestURI().startsWith("/api/v1/readings/healthz") ||
+                request.getRequestURI().startsWith("/api/v1/readings/email")) {
+            filterChain.doFilter(request, response);
             return;
         }
 
@@ -69,4 +66,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        return "OPTIONS".equalsIgnoreCase(request.getMethod());
+    }   
+
 }

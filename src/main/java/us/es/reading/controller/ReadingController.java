@@ -1,7 +1,5 @@
 package us.es.reading.controller;
 
-import java.util.Objects;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +24,7 @@ import us.es.reading.api.GenreUpdateDTO;
 import us.es.reading.api.ReadingDTO;
 import us.es.reading.entity.Genre;
 import us.es.reading.entity.ReadingEntity;
-import us.es.reading.exception.PreconditionException;
 import us.es.reading.service.impl.ReadingService;
-import us.es.reading.utils.Constants;
 
 @RestController
 @RequestMapping("${api.version}")
@@ -41,7 +37,8 @@ public class ReadingController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de lecturas obtenida exitosamente"),
             @ApiResponse(responseCode = "404", description = "Usuario no encontrado"),
-            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor"),
+            @ApiResponse(responseCode = "401", description = "Necesita proporcionar token de autenticación")
     })
     @GetMapping
     public ResponseEntity<ReadingEntity> getReadingsByUserId(@RequestParam("userId") @Valid String userId) {
@@ -57,9 +54,6 @@ public class ReadingController {
     @PostMapping("create-list")
     @ResponseStatus(HttpStatus.CREATED)
     public ReadingEntity createReading(@RequestBody @Valid ReadingDTO dto) {
-        if (Objects.isNull(dto.getUserKey()) || dto.getUserKey().isEmpty() || !dto.getUserKey().equals(Constants.KEY)) {
-            throw new PreconditionException(HttpStatus.PRECONDITION_FAILED + " El userKey es obligatorio o no ha sido validado");
-        }
         return readingService.createReadingEntity(dto.getUserId());
     }
 
