@@ -34,12 +34,30 @@ El microservicio expone las siguientes APIs REST para interactuar con las listas
 Este método es el core de los microservicios siguientes. Para un usuario que solicite y se confirme su alta en la aplicación deberá llamar a este microservicios
 para realizar la instacia de su espacio de lecturas incial. 
    - **Método**: `POST`
-   - **URL**: `/api/v1/readings/{userId}`
-   - **Descripción**: Crear lista de lectura inicial.   -
-   - **Ejemplo de la llamada**: /api/v1/readings/00000000001  
+   - **URL**: `/api/v1/readings/create-list`
+   - **Descripción**: Crear lista de lectura inicial.
+   - **Cuerpo de la solicitud**:
+     ```json
+     {
+        "userId": "string"
+     }
+     ```    
 
-### 2. **Añadir una nueva lista de lecturas**
-   - **Método**: `PUT`
+### 2. **Actualizar una lista de lecturas**
+   - **Método**: `PATCH`
+   - **URL**: `/api/v1/readings/update-genre`
+   - **Descripción**: Actualizar una lista de lecturas.
+   - **Cuerpo de la solicitud**:
+     ```json
+     {
+        "genreId": "string",
+        "numberReviews": 0,
+        "score": 0
+     }
+     ```  
+
+### 3. **Añadir una nueva lista de lecturas**
+   - **Método**: `PATCH`
    - **URL**: `/api/v1/readings/add-genre`
    - **Descripción**: Añadir un nuevo genero en lista de lecturas.
    - **Cuerpo de la solicitud**:
@@ -52,8 +70,8 @@ para realizar la instacia de su espacio de lecturas incial.
      }
      ```  
 
-### 3. **Añadir un nuevo libro**
-   - **Método**: `PUT`
+### 4. **Añadir un nuevo libro**
+   - **Método**: `PATCH`
    - **URL**: `/api/v1/readings/add-book`
    - **Descripción**: Añadir un nuevo libro a un genero de lecturas.
    - **Cuerpo de la solicitud**:
@@ -66,7 +84,7 @@ para realizar la instacia de su espacio de lecturas incial.
      }
      ```
 
-### 4. **Consultar las lecturas**
+### 5. **Consultar las lecturas**
    - **Método**: `GET`
    - **URL**: `/api/v1/readings`
    - **Descripción**: Obtener todas las lecturas de un usuario.
@@ -74,15 +92,25 @@ para realizar la instacia de su espacio de lecturas incial.
      ```
      userId: string
      ```
-   - **Ejemplo de la llamada**: /api/v1/readings?userId=00000000001  
+   - **Ejemplo de la llamada**: /api/v1/readings?userId=00000000001
 
-### 5. **Eliminar una lista de lectura**
+### 6. **Consultar una lista de lecturas**
+   - **Método**: `GET`
+   - **URL**: `/api/v1/readings/genres`
+   - **Descripción**: Obtener una lista de lecturas específicas de un usuario.
+   - **Parámetros**:
+     ```
+     genreId: string
+     ```
+   - **Ejemplo de la llamada**: /api/v1/readings/genre?genreId=00000000001  
+
+### 7. **Eliminar una lista de lectura**
    - **Método**: `DELETE`
    - **URL**: `/api/v1/readings/genre/{userId}/{genre}`
    - **Descripción**: Eliminar una lista de lectura según su genero.   
    - **Ejemplo de la llamada**: /api/v1/readings/genre/00000000001/IA 
 
-### 6. **Eliminar un libro**
+### 8. **Eliminar un libro**
    - **Método**: `DELETE`
    - **URL**: `/api/v1/readings/genre/{userId}/{genre}/{isbn}`
    - **Descripción**: Eliminar un libro de una lista de lecturas.
@@ -94,18 +122,25 @@ para realizar la instacia de su espacio de lecturas incial.
      ```
    - **Ejemplo de la llamada**: /api/v1/readings/genre/00000000001/IA/01010101
 
-### 7. **Enviar un email**
+### 9. **Enviar un email**
    - **Método**: `POST`
    - **URL**: `/api/v1/email`
    - **Descripción**: Enviar un email.
    - **Cuerpo de la solicitud**:
      ```json
      {
+        "from": "string"
         "to": "string",
         "subject": "string",
-        "body": "string"
+        "body": "string",
+        "keyEmail": "string"
      }
      ```
+
+### 10. **Consultar estado del microservicio**
+   - **Método**: `GET`
+   - **URL**: `/api/v1/readings/healthz`
+   - **Descripción**: Obtener el estado del microservicio.
 
 ---
 
