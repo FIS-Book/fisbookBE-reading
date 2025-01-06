@@ -237,4 +237,10 @@ public class ReadingService {
         }
         return (int) count;
     }
+
+    public List<ReadingEntity> getAllReadins() {
+        // Buscar todas las entidades ReadingEntity
+        List<ReadingEntity> allReadings = readingRepository.findAll();
+        return allReadings;
+    }
 }
