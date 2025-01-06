@@ -1,5 +1,7 @@
 package us.es.reading.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -123,5 +125,15 @@ public class ReadingController {
     @ResponseStatus(HttpStatus.OK)
     public Genre updateGenre(@RequestBody GenreUpdateDTO dto) {
         return readingService.updateGenre(dto);
+    }
+
+    @Operation(summary = "Obtener todas las listas de lecturas")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de lecturas obtenida exitosamente"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    @GetMapping("/all")
+    public ResponseEntity<List<ReadingEntity>> getGenreByUserId() {
+        return ResponseEntity.ok(readingService.getAllReadins());
     }
 }
