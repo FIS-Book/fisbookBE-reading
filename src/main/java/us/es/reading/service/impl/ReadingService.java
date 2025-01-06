@@ -1,13 +1,17 @@
 package us.es.reading.service.impl;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import jakarta.servlet.http.HttpServletRequest;
 import us.es.reading.api.BookDTO;
 import us.es.reading.api.GenreDTO;
 import us.es.reading.api.GenreUpdateDTO;
@@ -18,6 +22,7 @@ import us.es.reading.exception.ConflictoException;
 import us.es.reading.exception.PreconditionException;
 import us.es.reading.exception.ResourceNotFoundException;
 import us.es.reading.repository.ReadingRepository;
+import us.es.reading.template.BookService;
 import us.es.reading.utils.FieldsValidate;
 
 @Service
@@ -25,6 +30,9 @@ public class ReadingService {
 
     @Autowired
     private ReadingRepository readingRepository;
+
+    @Autowired
+    private BookService bookService;
 
     public ReadingEntity createReadingEntity(String userId) {
         if (userId == null || userId.isEmpty()) {
@@ -34,7 +42,7 @@ public class ReadingService {
         try {
             readingEntity = readingRepository.findByUserId(userId).get();
         } catch (Exception e) {
-           e.getMessage();
+            e.getMessage();
         }
         if (Objects.nonNull(readingEntity)) {
             throw new ConflictoException("El usuario " + userId + " ya existe.");
@@ -62,7 +70,7 @@ public class ReadingService {
         return readingRepository.save(readingEntity);
     }
 
-    private Genre generateGenre(GenreDTO dto, int size){
+    private Genre generateGenre(GenreDTO dto, int size) {
         Genre genre = new Genre();
         genre.setGenre(dto.getGenre());
         genre.setTitle(dto.getTitle());
@@ -96,7 +104,11 @@ public class ReadingService {
         book.setIsbn(dto.getIsbn());
         book.setTitle(dto.getTitle());
         genre.getBooks().add(book);
-        return readingRepository.save(readingEntity);
+        ReadingEntity result = readingRepository.save(readingEntity);
+
+        deleteAndUpdateBookWithApiExternal(dto.getIsbn());
+
+        return result;
     }
 
     public ReadingEntity removeBook(String userId, String genre, String isbn) {
@@ -117,19 +129,50 @@ public class ReadingService {
             throw new ResourceNotFoundException("El libro con ISBN " + isbn + " no existe en el género " + genre);
         }
         genreDto.getBooks().removeIf(b -> b.getIsbn().equals(isbn));
-        return readingRepository.save(readingEntity);
-    }    
+
+        ReadingEntity result = readingRepository.save(readingEntity);
+
+        deleteAndUpdateBookWithApiExternal(isbn);
+
+        return result;
+    }
+
+    private void deleteAndUpdateBookWithApiExternal(String isbn) {
+        if (Objects.nonNull(isbn) && !isbn.isEmpty()) {
+            int inReadingLists = countBooksByIsbn(isbn);
+            String jwtToken = getJwtFromContext();
+            bookService.booksExternalApi(isbn, inReadingLists, jwtToken);
+        }
+    }
 
     public String deleteGenre(String userId, String genre) {
+        // Buscar el ReadingEntity asociado al userId
         ReadingEntity reading = readingRepository.findByUserId(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("El usuario no existe o no tiene lecturas creadas"));
+
+        // Buscar el Genre que se quiere eliminar
+        Optional<Genre> genreToRemove = reading.getGenres().stream()
+                .filter(g -> Objects.nonNull(g.getGenre()) && g.getGenre().equalsIgnoreCase(genre))
+                .findFirst();
+
+        if (genreToRemove.isEmpty()) {
+            throw new ResourceNotFoundException("Genero " + genre + " no encontrado");
+        }
+
+        // Llamar a deleteAndUpdateBookWithApiExternal por cada libro del Genre
+        genreToRemove.get().getBooks().forEach(book -> removeBook(userId, genre, book.getIsbn()));
+
+        // Eliminar el Genre de la lista de géneros
         boolean removed = reading.getGenres()
                 .removeIf(g -> Objects.nonNull(g.getGenre()) && g.getGenre().equalsIgnoreCase(genre));
         if (!removed) {
             throw new ResourceNotFoundException("Genero " + genre + " no encontrado");
         }
+
+        // Guardar la entidad actualizada
         readingRepository.save(reading);
-        return "La lista de genero " + genre + " ha sido eliminada correctamente.";
+
+        return "La lista de género " + genre + " ha sido eliminada correctamente.";
     }
 
     public ReadingEntity getReadingsByUserId(String userId) {
@@ -172,68 +215,26 @@ public class ReadingService {
         return genre;
     }
 
-    // private void validateFieldsToAddGenreToReadingEntity(GenreDTO dto) {
-    //     // Validar que todos los campos obligatorios están presentes
-    //     if (dto.getGenre() == null || dto.getGenre().isEmpty()) {
-    //         throw new PreconditionException(HttpStatus.PRECONDITION_FAILED + " El genero es obligatorio.");
-    //     }
-    //     if (dto.getTitle() == null || dto.getTitle().isEmpty()) {
-    //         throw new PreconditionException(HttpStatus.PRECONDITION_FAILED + " El título es obligatorio.");
-    //     }
-    //     if (dto.getDescription() == null || dto.getDescription().isEmpty()) {
-    //         throw new PreconditionException(HttpStatus.PRECONDITION_FAILED + " La descripción es obligatoria.");
-    //     }
-    // }
+    private String getJwtFromContext() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest();
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            return authHeader.substring(7);
+        }
+        throw new IllegalStateException("JWT no encontrado en el encabezado Authorization");
+    }
 
-    // private void validateFieldsToAddBookToGenre(BookDTO dto) {
-    //     // Validar que todos los campos obligatorios están presentes
-    //     if (dto.getUserId() == null || dto.getUserId().isEmpty()) {
-    //         throw new PreconditionException(HttpStatus.PRECONDITION_FAILED + " El id del usuario es obligatorio.");
-    //     }
-    //     if (dto.getGenre() == null || dto.getGenre().isEmpty()) {
-    //         throw new PreconditionException(HttpStatus.PRECONDITION_FAILED + " El genero es obligatorio.");
-    //     }
-    //     if (dto.getTitle() == null || dto.getTitle().isEmpty()) {
-    //         throw new PreconditionException(HttpStatus.PRECONDITION_FAILED + " El título es obligatorio.");
-    //     }
-    //     if (dto.getIsbn() == null || dto.getIsbn().isEmpty()) {
-    //         throw new PreconditionException(HttpStatus.PRECONDITION_FAILED + " El ISBN es obligatoria.");
-    //     }
-    //     if (!ISBNValidator.isValidISBN(dto.getIsbn())) {
-    //         throw new PreconditionException(HttpStatus.PRECONDITION_FAILED + " El ISBN no es válido.");
-    //     }
-    // }
-//     private void validateFieldsToRemoveBook(String userId, String genre, String isbn){
-//         if (userId == null || userId.isEmpty()) {
-//            throw new PreconditionException(HttpStatus.PRECONDITION_FAILED + " El id del usuario es obligatorio.");
-//        }
-//        if (genre == null || genre.isEmpty()) {
-//            throw new PreconditionException(HttpStatus.PRECONDITION_FAILED + " El genero es obligatorio.");
-//        }
-//        if (isbn == null || isbn.isEmpty()) {
-//            throw new PreconditionException(HttpStatus.PRECONDITION_FAILED + " El ISBN es obligatorio.");
-//        }
-//        if (!ISBNValidator.isValidISBN(isbn)) {
-//            throw new PreconditionException(HttpStatus.PRECONDITION_FAILED + " El ISBN no es válido.");
-//        }
-//    }
-
-    // private void validateGenreUpdateDTO(GenreUpdateDTO dto) {
-    //     if (dto.getGenreId() == null || dto.getGenreId().isEmpty()) {
-    //         throw new PreconditionException(
-    //                 HttpStatus.PRECONDITION_FAILED + " El identificador del genero es obligatorio.");
-    //     }
-    //     if (!dto.getGenreId().contains("_") || dto.getGenreId().split("_").length != 2) {
-    //         throw new PreconditionException(
-    //                 HttpStatus.PRECONDITION_FAILED + " Formato de identificador de genero no válido.");
-    //     }
-    //     if (dto.getNumberReviews() != null && dto.getNumberReviews() <= 0) {
-    //         throw new PreconditionException(
-    //                 HttpStatus.PRECONDITION_FAILED + " Las reseñas no puden ser cero ni negativas.");
-    //     }
-    //     if (dto.getScore() != null && (dto.getScore() <= 0.0)) {
-    //         throw new PreconditionException(
-    //                 HttpStatus.PRECONDITION_FAILED + " Las puntuaciones no pueden ser cero ni negativas");
-    //     }
-    // }
+    private Integer countBooksByIsbn(String isbn) {
+        List<ReadingEntity> allReadings = readingRepository.findAll();
+        long count = allReadings.stream()
+                .flatMap(reading -> reading.getGenres().stream()) // Obtener todos los géneros
+                .flatMap(genre -> genre.getBooks().stream()) // Obtener todos los libros de cada género
+                .filter(book -> book.getIsbn().equals(isbn)) // Filtrar libros con el ISBN especificado
+                .count(); // Contar los resultados
+        if (count > Integer.MAX_VALUE) {
+            throw new ArithmeticException("El conteo de libros excede el límite de un Integer.");
+        }
+        return (int) count;
+    }
 }
