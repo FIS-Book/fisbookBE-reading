@@ -68,13 +68,13 @@ public class FieldsValidate {
             throw new PreconditionException(
                     HttpStatus.PRECONDITION_FAILED + " Formato de identificador de genero no válido.");
         }
-        if (dto.getNumberReviews() != null && dto.getNumberReviews() <= 0) {
+        if (dto.getNumberReviews() != null && dto.getNumberReviews() < 0) {
             throw new PreconditionException(
-                    HttpStatus.PRECONDITION_FAILED + " Las reseñas no puden ser cero ni negativas.");
+                    HttpStatus.PRECONDITION_FAILED + " Las reseñas no puden ser negativas.");
         }
-        if (dto.getScore() != null && (dto.getScore() <= 0.0)) {
+        if (dto.getScore() != null && (dto.getScore() < 0.0)) {
             throw new PreconditionException(
-                    HttpStatus.PRECONDITION_FAILED + " Las puntuaciones no pueden ser cero ni negativas");
+                    HttpStatus.PRECONDITION_FAILED + " Las puntuaciones no pueden ser negativas");
         }
     }
 
