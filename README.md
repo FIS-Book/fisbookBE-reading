@@ -171,9 +171,7 @@ para realizar la instacia de su espacio de lecturas incial.
 - Maven 3.8+
 - MongoDB
 - Docker última versión
-- Solicitar la carpeta .env al equipo reading-service
-```[edwareang@alum.us.es]  
-[matgou@alum.us.es]```
+- Solicitar la carpeta .env al equipo reading-service: edwareang@alum.us.es, matgou@alum.us.es
 
 ### Pasos
 1. Clona el repositorio:
