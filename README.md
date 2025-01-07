@@ -172,9 +172,9 @@ para realizar la instacia de su espacio de lecturas incial.
 - MongoDB
 - Docker última versión
 - Solicitar la carpeta .env al equipo reading-service
-```[edwareang@alum.us.es](mailto:edwareang@alum.us.es)   
+```[edwareang@alum.us.es]  
 ```
-```[matgou@alum.us.es](mailto:matgou@alum.us.es)
+```[matgou@alum.us.es]
 ```
 ### Pasos
 1. Clona el repositorio:
