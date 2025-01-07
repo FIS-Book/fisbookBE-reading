@@ -129,15 +129,19 @@ para realizar la instacia de su espacio de lecturas incial.
    - **Cuerpo de la solicitud**:
      ```json
      {
-        "from": "string"
+        "from": "string",
         "to": "string",
         "subject": "string",
         "body": "string",
         "keyEmail": "string"
      }
      ```
-
 ### 10. **Consultar estado del microservicio**
+   - **Método**: `GET`
+   - **URL**: `/api/v1/readings/all`
+   - **Descripción**: Obtener todas las listas de lecturas.
+
+### 11. **Consultar estado del microservicio**
    - **Método**: `GET`
    - **URL**: `/api/v1/readings/healthz`
    - **Descripción**: Obtener el estado del microservicio.
@@ -183,3 +187,22 @@ para realizar la instacia de su espacio de lecturas incial.
 
 ## 📖 Test unitarios y de integración
 
+Test 
+
+Para verificar el correcto funcionamiento de la aplicación y de todos los módulos en conjunto se han realizado un total de 77 pruebas  
+
+1. ✅ Unitarios:  
+
+   Paquete api: 32 test que incluyen escenarios positivos y negativos. 
+
+   Paquete entity: 28 test que incluyen escenarios positivos y negativos. 
+
+2. ⚙️ Integración:  
+
+   Paquete controller:13 test que incluyen escenarios positivos y negativos.  
+
+   Paquete repository: 4 test que incluyen  
+
+3. 🚀🐙⚙️ Integración continua 
+
+   Se realiza mediate la integración con GITHUB configurando el respectivo Action en el fichero integration-test.yml. Para el lanzamiento correcto de las pruebas de integración se tiene que tener en cuenta que se deben configurar 4 secretos en el repositorio de GIT. 
