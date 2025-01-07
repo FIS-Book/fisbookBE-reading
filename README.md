@@ -1,6 +1,6 @@
 # 📚 Microservicio REST - reading-service
 
-Este proyecto es un **microservicio REST** diseñado para gestionar una lista organizada de lecturas preferidas por usuarios. Implementa una **arquitectura limpia** orientada a microservicios y está desarrollado con tecnologías modernas como **Java 17**, **Spring Boot**, **MongoDB** y **Maven**.
+Este proyecto es un **microservicio REST** diseñado para gestionar una lista organizada de lecturas preferidas por usuarios. Implementa una **arquitectura limpia** orientada a microservicios y está desarrollado con tecnologías como **Java 17**, **Spring Boot**, **MongoDB**, **Maven**, **Docker**, entre otras...
 
 ---
 
@@ -209,4 +209,4 @@ Para verificar el correcto funcionamiento de la aplicación y de todos los módu
 
 3. 🚀🐙⚙️ Integración continua 
 
-   Se realiza mediate la integración con GITHUB configurando el respectivo Action en el fichero integration-test.yml. Para el lanzamiento correcto de las pruebas de integración se tiene que tener en cuenta que se deben configurar 4 secretos en el repositorio de GIT. 
+   Se realiza mediate la integración con GITHUB configurando el respectivo Action en el fichero integration-test.yml. Para el lanzamiento correcto de las pruebas de integración se tiene que tener en cuenta que se deben configurar 4 secretos en el repositorio de GIT.
