@@ -1,6 +1,6 @@
 # 📚 Microservicio REST - reading-service
 
-Este proyecto es un **microservicio REST** diseñado para gestionar una lista organizada de lecturas preferidas por usuarios. Implementa una **arquitectura limpia** orientada a microservicios y está desarrollado con tecnologías modernas como **Java 17**, **Spring Boot**, **MongoDB** y **Maven**.
+Este proyecto es un **microservicio REST** diseñado para gestionar una lista organizada de lecturas preferidas por usuarios. Implementa una **arquitectura limpia** orientada a microservicios y está desarrollado con tecnologías como **Java 17**, **Spring Boot**, **MongoDB**, **Maven**, **Docker**, entre otras...
 
 ---
 
@@ -9,9 +9,8 @@ Este proyecto es un **microservicio REST** diseñado para gestionar una lista or
 - **Gestión de lecturas de usuarios**: Los usuarios pueden crear, consultar, actualizar y eliminar su lista de lecturas preferidas.
 - **Arquitectura limpia**: Basado en principios de separación de capas para facilitar mantenibilidad y escalabilidad.
 - **Persistencia NoSQL**: MongoDB se utiliza como base de datos para almacenar los datos del microservicio.
-- **Comunicación asincrónica**: Kafka se usa para integrar eventos con otros servicios en el ecosistema.
 - **Pruebas**: Se incluyen pruebas unitarias y de integración para garantizar la calidad del código.
-- **Despliegue**: Preparado para entornos en contenedores con Docker.
+- **Despliegue**: Preparado para entornos en contenedores con Docker y Kubernetes.
 
 ---
 
@@ -23,6 +22,7 @@ Este proyecto es un **microservicio REST** diseñado para gestionar una lista or
 - **Maven**: Herramienta de gestión de dependencias y compilación.
 - **Docker**: Para contenedores y despliegue.
 - **JUnit y Mockito**: Framework para pruebas unitarias e integración.
+- **GitHub**: Sistema repositorio y para uso de pruebas de integración continua
 
 ---
 
@@ -129,15 +129,19 @@ para realizar la instacia de su espacio de lecturas incial.
    - **Cuerpo de la solicitud**:
      ```json
      {
-        "from": "string"
+        "from": "string",
         "to": "string",
         "subject": "string",
         "body": "string",
         "keyEmail": "string"
      }
      ```
-
 ### 10. **Consultar estado del microservicio**
+   - **Método**: `GET`
+   - **URL**: `/api/v1/readings/all`
+   - **Descripción**: Obtener todas las listas de lecturas.
+
+### 11. **Consultar estado del microservicio**
    - **Método**: `GET`
    - **URL**: `/api/v1/readings/healthz`
    - **Descripción**: Obtener el estado del microservicio.
@@ -146,14 +150,18 @@ para realizar la instacia de su espacio de lecturas incial.
 
 ## 📦 Estructura del Proyecto
 
-- **Dto**: Objetos para tranferir la información entre capas
-- **Controller**: Clases encargadas para la exposición de APIs.
-- **Service**: Especificaciones e implementaciones de los servicios ofrecidos
-- **Entity**: Clases usadas para el mapeo entre Java y Mongo.
+- **Api**: Almacena la clases para tranferir la información entre capas
+- **Controller**: Almacena la clases encargadas para la exposición de APIs.
+- **Service**: Almacena la clases de especificaciones e implementaciones de los servicios ofrecidos
+- **Entity**: Almacena la clases usadas para el mapeo entre Java y Mongo.
 - **Repository**: Especificaciones para el acceso y operaciones con la base de datos
 - **Tests**: Pruebas unitarias y de integración organizadas en módulos específicos.
+- **Config**: Almacena la clases para la configuracion de Cors, Swagger y Seguridad de la aplicación
 - **Resources**: Almacen del fichero .properties que permite acceder mediante varibles a las propiedades de configuración del proyecto                 
-
+- **Exception**: Almacena las clases encargadas del control de exepciones personalizadas
+- **JWT**: Almacena la clase encagada para el manejo ycontrol de autenticación
+- **Template**: Almacena la clase encargada para la comunicación entre microservicios
+- **Utils**: Almacena las clases encargadas de la validación de campos y declaración de constantes
 ---
 
 ## 📖 Cómo Contruir el Proyecto y generar la imagen
@@ -183,3 +191,22 @@ para realizar la instacia de su espacio de lecturas incial.
 
 ## 📖 Test unitarios y de integración
 
+Test 
+
+Para verificar el correcto funcionamiento de la aplicación y de todos los módulos en conjunto se han realizado un total de 77 pruebas  
+
+1. ✅ Unitarios:  
+
+   Paquete api: 32 test que incluyen escenarios positivos y negativos. 
+
+   Paquete entity: 28 test que incluyen escenarios positivos y negativos. 
+
+2. ⚙️ Integración:  
+
+   Paquete controller:13 test que incluyen escenarios positivos y negativos.  
+
+   Paquete repository: 4 test que incluyen  
+
+3. 🚀🐙⚙️ Integración continua 
+
+   Se realiza mediate la integración con GITHUB configurando el respectivo Action en el fichero integration-test.yml. Para el lanzamiento correcto de las pruebas de integración se tiene que tener en cuenta que se deben configurar 4 secretos en el repositorio de GIT.
